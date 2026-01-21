@@ -15,9 +15,11 @@ export default function Home() {
     e.preventDefault();
     if (query.trim()) {
       const input = query.trim().toLowerCase();
-      const match = input.match(/^(\d?\s*[a-z]+)\s+(\d+):(.+)$/i);
+      // Match patterns like "John 3:16", "1 Corinthians 13:4", "1cor 13:4-7"
+      const match = input.match(/^(\d?\s*[a-z]+(?:\s+[a-z]+)?)\s+(\d+):(.+)$/i);
       if (match) {
         const [, book, chapter, verse] = match;
+        // Replace spaces with hyphens for URL, handle "1 corinthians" -> "1-corinthians"
         const cleanBook = book.replace(/\s+/g, "-").trim();
         const cleanVerse = verse.trim();
         router.push(`/verse/${cleanBook}/${chapter}/${cleanVerse}`);
@@ -55,11 +57,14 @@ export default function Home() {
       {/* Main content */}
       <div className="max-w-md w-full text-center relative z-10">
         <div className="opacity-0 animate-fade-in-up">
-          <h1 className="nanum-pen-script-regular text-6xl sm:text-7xl text-walnut mb-2 drop-shadow-sm">
-            Bible Search
+          <h1 className="nanum-pen-script-regular text-6xl sm:text-7xl text-walnut mb-3 drop-shadow-sm">
+            koinYOU
           </h1>
-          <p className="reenie-beanie-regular text-2xl sm:text-3xl text-pine mb-12">
-            Find comfort in His words
+          <p className="reenie-beanie-regular text-2xl sm:text-3xl text-pine mb-3">
+            Live and breathe God&apos;s word, together.
+          </p>
+          <p className="figtree-light text-xs text-olive/80 mb-12">
+            Because there&apos;s no <Link href="/about" className="figtree-semibold text-pine hover:text-dark-teal transition-colors link-underline">koinonia</Link> without <Link href="/join" className="figtree-medium text-walnut hover:text-pine transition-colors link-underline">you</Link>.
           </p>
         </div>
 
@@ -111,8 +116,8 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="absolute bottom-6 z-10 opacity-0 animate-fade-in stagger-5">
-        <p className="reenie-beanie-regular text-lg text-olive/70">
-          Powered by bible-api.com
+        <p className="figtree-light text-xs text-olive/60">
+          koinYOU © 2026
         </p>
       </footer>
     </main>

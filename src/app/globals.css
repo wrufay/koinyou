@@ -25,6 +25,10 @@ body {
   color: var(--foreground);
 }
 
+button {
+  cursor: pointer;
+}
+
 .nanum-pen-script-regular {
   font-family: var(--font-nanum-pen-script), cursive;
   font-weight: 400;
@@ -259,6 +263,7 @@ body {
 .btn-primary {
   position: relative;
   overflow: hidden;
+  cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -282,6 +287,7 @@ body {
 
 /* Tag/chip hover */
 .tag-hover {
+  cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
