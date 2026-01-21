@@ -44,12 +44,20 @@ export default function Home() {
       {/* Header */}
       <div className="absolute top-5 right-5 flex items-center gap-4 z-10">
         {user && (
-          <Link
-            href="/saved"
-            className="figtree-medium text-xs text-olive hover:text-walnut transition-colors link-underline"
-          >
-            Saved
-          </Link>
+          <>
+            <Link
+              href="/community"
+              className="figtree-medium text-xs text-olive hover:text-walnut transition-colors link-underline"
+            >
+              Community
+            </Link>
+            <Link
+              href="/saved"
+              className="figtree-medium text-xs text-olive hover:text-walnut transition-colors link-underline"
+            >
+              Saved
+            </Link>
+          </>
         )}
         <AuthButton />
       </div>

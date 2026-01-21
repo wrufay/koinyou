@@ -21,15 +21,18 @@ router.get(
 
 // @route   GET /auth/user
 // @desc    Get current user
-router.get("/user", (req, res) => {
+router.get("/user", async (req, res) => {
   if (req.user) {
+    // Fetch fresh user data from database to ensure avatar is up-to-date
+    const User = require("../models/User");
+    const freshUser = await User.findById(req.user._id);
     res.json({
       success: true,
       user: {
-        id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
-        avatar: req.user.avatar,
+        id: freshUser._id,
+        name: freshUser.name,
+        email: freshUser.email,
+        avatar: freshUser.avatar,
       },
     });
   } else {

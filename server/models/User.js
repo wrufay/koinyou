@@ -19,6 +19,16 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
+    bio: {
+      type: String,
+      maxlength: 200,
+      default: "",
+    },
+    favoriteVerse: {
+      type: String,
+      maxlength: 100,
+      default: "",
+    },
   },
   {
     timestamps: true,

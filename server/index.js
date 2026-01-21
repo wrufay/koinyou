@@ -2,10 +2,16 @@ require("dotenv").config();
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
+const path = require("path");
 const connectDB = require("./config/db");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
 const versesRoutes = require("./routes/verses");
+const friendsRoutes = require("./routes/friends");
+const sendRoutes = require("./routes/send");
+const prayersRoutes = require("./routes/prayers");
+const devotionsRoutes = require("./routes/devotions");
+const profileRoutes = require("./routes/profile");
 
 const app = express();
 
@@ -41,6 +47,14 @@ app.use(passport.session());
 // Routes
 app.use("/auth", authRoutes);
 app.use("/api/verses", versesRoutes);
+app.use("/api/friends", friendsRoutes);
+app.use("/api/send", sendRoutes);
+app.use("/api/prayers", prayersRoutes);
+app.use("/api/devotions", devotionsRoutes);
+app.use("/api/profile", profileRoutes);
+
+// Serve uploaded files
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
   res.json({ message: "Bible Search API" });

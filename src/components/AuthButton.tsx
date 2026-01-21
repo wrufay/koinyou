@@ -2,6 +2,15 @@
 
 import { useAuth } from "@/context/AuthContext";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
+
+// Helper to get full avatar URL
+const getAvatarUrl = (avatar: string) => {
+  if (!avatar) return "";
+  if (avatar.startsWith("http")) return avatar;
+  return `${API_URL}${avatar}`;
+};
+
 export default function AuthButton() {
   const { user, loading, login, logout } = useAuth();
 
@@ -18,7 +27,7 @@ export default function AuthButton() {
       <div className="flex items-center gap-3">
         {user.avatar && (
           <img
-            src={user.avatar}
+            src={getAvatarUrl(user.avatar)}
             alt={user.name}
             className="w-8 h-8 rounded-full border-2 border-white/50 shadow-md
                        transition-transform duration-300 hover:scale-105"
