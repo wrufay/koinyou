@@ -8,21 +8,17 @@ Live and breathe God's word, together.
 
 ## What is this?
 
-koinYOU is a Bible app built for community. There are plenty of Bible apps out there, but most feel impersonal. This one is about doing faith *with* people — search verses, save the ones that resonate, share them with friends, and pray for each other.
+koinYOU is a Bible app built for community. Search for any verse, save the ones that stick with you, and share them with friends. There's also a prayer wall where you can post prayers and lift others up, plus a space for devotions.
 
-## Why I made this
-
-I wanted to build something meaningful. Not for profit, not for clout — just something that might actually help people connect with Scripture and with each other.
-
-There's something special about reading the same verse your friend is reading, or knowing someone prayed for you today. That's the goal here.
+Most Bible apps feel like you're reading alone. This one's different — it's about doing faith *with* people.
 
 ## Features
 
-- **Verse Search** — Find any verse instantly (supports formats like "1 Corinthians 13:4-7")
-- **Save Verses** — Keep the ones that matter to you
-- **Send to Friends** — Share verses with people you care about
+- **Verse Search** — Find any verse instantly (try "John 3:16" or "1 Corinthians 13:4-7")
+- **Save Verses** — Build your personal collection
+- **Send to Friends** — Share a verse with someone who needs it
 - **Prayer Wall** — Post prayers, pray for others
-- **Devotions** — Read and share what God's teaching you
+- **Devotions** — Share what God's been teaching you
 
 ## Tech Stack
 
@@ -52,13 +48,7 @@ You'll need a `.env` file with your MongoDB URI, Google OAuth credentials, etc.
 
 ## Contributing
 
-If you want to help make this better, PRs are welcome.
-
-## A Note
-
-This isn't a startup. I'm not trying to monetize this or turn it into a business. It's just a project made for anyone who wants to grow closer to God and to each other.
-
-If even one person feels less alone in their faith because of this app, that's enough.
+PRs welcome! If you want to help make this better, go for it.
 
 ---
 
@@ -66,4 +56,4 @@ If even one person feels less alone in their faith because of this app, that's e
 
 ---
 
-Made with prayer and coffee.
+Made with prayer and coffee ☕
