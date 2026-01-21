@@ -28,6 +28,8 @@ app.use(
 app.use(express.json());
 
 // Session
+const isProduction = process.env.NODE_ENV === "production";
+app.set("trust proxy", 1); // Trust Railway's proxy
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "your-secret-key",
@@ -35,7 +37,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax", // Required for cross-site cookies
     },
   })
 );
