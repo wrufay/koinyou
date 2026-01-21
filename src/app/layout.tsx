@@ -21,8 +21,8 @@ const reenieBeanie = Reenie_Beanie({
 });
 
 export const metadata: Metadata = {
-  title: "Bible Search",
-  description: "A minimalist Bible verse search app",
+  title: "koinYOU",
+  description: "Connect with friends through Scripture",
 };
 
 export default function RootLayout({

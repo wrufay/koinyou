@@ -8,6 +8,8 @@
   --color-ash: #A3BBAD;
   --color-olive: #65532F;
   --color-walnut: #312509;
+  --color-cream: #F5F1E3;
+  --color-sand: #E8E0C8;
 }
 
 :root {
@@ -18,6 +20,8 @@
   --ash: #A3BBAD;
   --olive: #65532F;
   --walnut: #312509;
+  --cream: #F5F1E3;
+  --sand: #E8E0C8;
 }
 
 body {
@@ -185,6 +189,30 @@ button {
 
 .animate-slide-up {
   animation: slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Floating drift animation for background elements */
+@keyframes float-drift {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(10px, -20px) rotate(5deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-5px, -35px) rotate(-3deg);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(15px, -15px) rotate(8deg);
+    opacity: 0.7;
+  }
+}
+
+.animate-float-drift {
+  animation: float-drift 20s ease-in-out infinite;
 }
 
 /* Staggered animations */
