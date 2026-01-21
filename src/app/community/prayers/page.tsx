@@ -295,7 +295,7 @@ export default function PrayersPage() {
                       </button>
                     )}
 
-                    {!prayer.hasPrayed && prayer.user._id !== user?._id && (
+                    {!prayer.hasPrayed && prayer.user._id !== user?.id && (
                       <button
                         onClick={() => prayFor(prayer._id)}
                         className="figtree-medium px-4 py-1.5 rounded-lg bg-pine/10 hover:bg-pine/20
