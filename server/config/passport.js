@@ -27,6 +27,11 @@ passport.use(
         let user = await User.findOne({ googleId: profile.id });
 
         if (user) {
+          // Update avatar on each login in case it changed
+          if (profile.photos[0]?.value && user.avatar !== profile.photos[0].value) {
+            user.avatar = profile.photos[0].value;
+            await user.save();
+          }
           return done(null, user);
         }
 

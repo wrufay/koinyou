@@ -2,69 +2,63 @@
 
 > *koinonia* (Greek: κοινωνία) — fellowship, community, sharing in common
 
-live and breathe God's word, together.
+Live and breathe God's word, together.
 
 ---
 
-## what is this
+## What is this?
 
-koinYOU is a little bible app i built because i wanted something that felt more... personal? like yeah there's a million bible apps out there but most of them feel kinda corporate and lonely.
+koinYOU is a Bible app built for community. There are plenty of Bible apps out there, but most feel impersonal. This one is about doing faith *with* people — search verses, save the ones that resonate, share them with friends, and pray for each other.
 
-this one is about doing faith *with* people. search verses, save the ones that hit different, share them with friends, pray for each other. that's it. nothing fancy.
+## Why I made this
 
-## why i made this
+I wanted to build something meaningful. Not for profit, not for clout — just something that might actually help people connect with Scripture and with each other.
 
-honestly i just wanted to build something meaningful. not for clout, not to make money off christians (that feels weird lol), just... something that might actually help people connect with scripture and with each other.
+There's something special about reading the same verse your friend is reading, or knowing someone prayed for you today. That's the goal here.
 
-there's something beautiful about reading the same verse your friend is reading, or knowing someone prayed for you today. that's the vibe i'm going for.
+## Features
 
-## features
+- **Verse Search** — Find any verse instantly (supports formats like "1 Corinthians 13:4-7")
+- **Save Verses** — Keep the ones that matter to you
+- **Send to Friends** — Share verses with people you care about
+- **Prayer Wall** — Post prayers, pray for others
+- **Devotions** — Read and share what God's teaching you
 
-- **verse search** — find any verse instantly (supports stuff like "1 corinthians 13:4-7")
-- **save verses** — keep the ones that matter to you
-- **send to friends** — share verses with people you care about
-- **prayer wall** — post prayers, pray for others
-- **devotions** — read and share what God's teaching you
+## Tech Stack
 
-## tech stuff
+- **Frontend**: Next.js, Tailwind CSS
+- **Backend**: Express, Node.js
+- **Database**: MongoDB
+- **Auth**: Google OAuth
+- **Hosting**: Vercel (frontend) + Railway (backend)
 
-if you're curious (or want to learn):
-
-- **frontend**: next.js, tailwind css
-- **backend**: express, node.js
-- **database**: mongodb
-- **auth**: google oauth
-- **hosting**: vercel (frontend) + railway (backend)
-
-built this whole thing pretty fast ngl. proof that you don't need to overcomplicate things.
-
-## running it locally
+## Running Locally
 
 ```bash
-# clone it
+# Clone the repo
 git clone https://github.com/yourusername/koinyou.git
 
-# frontend
+# Frontend
 npm install
 npm run dev
 
-# backend (in another terminal)
+# Backend (in another terminal)
 cd server
 npm install
 npm run dev
 ```
 
-you'll need a `.env` file with your mongodb uri, google oauth credentials, etc. dm me if you're stuck.
+You'll need a `.env` file with your MongoDB URI, Google OAuth credentials, etc.
 
-## contributing
+## Contributing
 
-if you want to help make this better, i'd love that. just open a PR or reach out. no pressure tho.
+If you want to help make this better, PRs are welcome.
 
-## a note
+## A Note
 
-this isn't a startup. i'm not trying to get rich off this or turn it into some big thing. it's just a project made with love for anyone who wants to grow closer to God and to each other.
+This isn't a startup. I'm not trying to monetize this or turn it into a business. It's just a project made for anyone who wants to grow closer to God and to each other.
 
-if even one person feels less alone in their faith because of this app, that's enough for me.
+If even one person feels less alone in their faith because of this app, that's enough.
 
 ---
 
@@ -72,4 +66,4 @@ if even one person feels less alone in their faith because of this app, that's e
 
 ---
 
-made with prayer and a lot of coffee
+Made with prayer and coffee.
