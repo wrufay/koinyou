@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# koinYOU
 
-## Getting Started
+> *koinonia* (Greek: κοινωνία) — fellowship, community, sharing in common
 
-First, run the development server:
+live and breathe God's word, together.
+
+---
+
+## what is this
+
+koinYOU is a little bible app i built because i wanted something that felt more... personal? like yeah there's a million bible apps out there but most of them feel kinda corporate and lonely.
+
+this one is about doing faith *with* people. search verses, save the ones that hit different, share them with friends, pray for each other. that's it. nothing fancy.
+
+## why i made this
+
+honestly i just wanted to build something meaningful. not for clout, not to make money off christians (that feels weird lol), just... something that might actually help people connect with scripture and with each other.
+
+there's something beautiful about reading the same verse your friend is reading, or knowing someone prayed for you today. that's the vibe i'm going for.
+
+## features
+
+- **verse search** — find any verse instantly (supports stuff like "1 corinthians 13:4-7")
+- **save verses** — keep the ones that matter to you
+- **send to friends** — share verses with people you care about
+- **prayer wall** — post prayers, pray for others
+- **devotions** — read and share what God's teaching you
+
+## tech stuff
+
+if you're curious (or want to learn):
+
+- **frontend**: next.js, tailwind css
+- **backend**: express, node.js
+- **database**: mongodb
+- **auth**: google oauth
+- **hosting**: vercel (frontend) + railway (backend)
+
+built this whole thing pretty fast ngl. proof that you don't need to overcomplicate things.
+
+## running it locally
 
 ```bash
+# clone it
+git clone https://github.com/yourusername/koinyou.git
+
+# frontend
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# backend (in another terminal)
+cd server
+npm install
+npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+you'll need a `.env` file with your mongodb uri, google oauth credentials, etc. dm me if you're stuck.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+if you want to help make this better, i'd love that. just open a PR or reach out. no pressure tho.
 
-## Learn More
+## a note
 
-To learn more about Next.js, take a look at the following resources:
+this isn't a startup. i'm not trying to get rich off this or turn it into some big thing. it's just a project made with love for anyone who wants to grow closer to God and to each other.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+if even one person feels less alone in their faith because of this app, that's enough for me.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+*"And they devoted themselves to the apostles' teaching and the fellowship, to the breaking of bread and the prayers."* — Acts 2:42
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+made with prayer and a lot of coffee
