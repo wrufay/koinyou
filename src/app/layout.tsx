@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Figtree, Nanum_Pen_Script, Reenie_Beanie } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
@@ -34,6 +35,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${figtree.variable} ${nanumPenScript.variable} ${reenieBeanie.variable} antialiased`}>
         <AuthProvider>{children}</AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
