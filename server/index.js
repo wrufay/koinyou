@@ -5,6 +5,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const passport = require("./config/passport");
 const authRoutes = require("./routes/auth");
+const versesRoutes = require("./routes/verses");
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use(passport.session());
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/api/verses", versesRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "Bible Search API" });
