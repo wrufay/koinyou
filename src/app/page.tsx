@@ -19,8 +19,8 @@ export default function Home() {
       const match = input.match(/^(\d?\s*[a-z]+(?:\s+[a-z]+)?)\s+(\d+):(.+)$/i);
       if (match) {
         const [, book, chapter, verse] = match;
-        // Replace spaces with hyphens for URL, handle "1 corinthians" -> "1-corinthians"
-        const cleanBook = book.replace(/\s+/g, "-").trim();
+        // Remove spaces for books like "1 corinthians" -> "1corinthians" (what bible-api expects)
+        const cleanBook = book.replace(/\s+/g, "").trim();
         const cleanVerse = verse.trim();
         router.push(`/verse/${cleanBook}/${chapter}/${cleanVerse}`);
       }
