@@ -50,3 +50,8 @@ You'll need a `.env` file with your MongoDB URI, Google OAuth credentials, etc.
 
 PRs welcome! If you want to help make this better, go for it.
 You can also contact me here: f26wu[at]uwaterloo[dot]ca
+
+## To-do
+
+- Store uploaded pfps in Cloudinary so they don't reset on redeploy
+
