@@ -1,6 +1,6 @@
 # koinYOU
 
-> *koinonia* (Greek: κοινωνία) - fellowship, community, sharing in common
+> _koinonia_ (Greek: κοινωνία) - fellowship, community, sharing in common
 
 Live and breathe God's word, together.
 
@@ -8,9 +8,17 @@ Live and breathe God's word, together.
 
 ## What is this?
 
-koinYOU is a Bible app built for community. Search for any verse, save the ones that stick with you, and share them with friends. There's also a prayer wall where you can post prayers and lift others up, plus a space for devotions.
+koinYOU is a Bible app built for community; **so fellowship can follow you far and wide.**
 
-Most Bible apps feel like you're reading alone. This one's different - it's about doing faith *with* people.
+## How it works:
+
+Search for any verse, save the ones that stick with you, and share them with friends.
+
+Keep your fellowship accountable and lift eachother up through shared prayer walls, streaks and daily devotionals.
+
+# Why koinYOU?
+
+Most Bible apps feel like you're reading alone. This one's different - it's about doing faith _with_ people through diving into scripture daily.
 
 ## Features
 
@@ -22,7 +30,7 @@ Most Bible apps feel like you're reading alone. This one's different - it's abou
 
 ## Tech Stack
 
-- **Frontend**: Next.js, Tailwind CSS
+- **Frontend**: Next.js, React.js, Tailwind CSS
 - **Backend**: Express, Node.js
 - **Database**: MongoDB
 - **Auth**: Google OAuth
@@ -32,7 +40,7 @@ Most Bible apps feel like you're reading alone. This one's different - it's abou
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/koinyou.git
+git clone https://github.com/wrufay/koinyou.git
 
 # Frontend
 npm install
@@ -48,10 +56,9 @@ You'll need a `.env` file with your MongoDB URI, Google OAuth credentials, etc.
 
 ## Contributing
 
-PRs welcome! If you want to help make this better, go for it.
-You can also contact me here: f26wu[at]uwaterloo[dot]ca
+PRs welcome! Help me make this better :)
+f26wu[at]uwaterloo[dot]ca
 
 ## To-do
 
 - Store uploaded pfps in Cloudinary so they don't reset on redeploy
-
