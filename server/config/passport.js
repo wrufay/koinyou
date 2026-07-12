@@ -1,6 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
+const { generateAvatarSvg } = require("../utils/avatar");
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -28,12 +29,6 @@ passport.use(
         let user = await User.findOne({ googleId: profile.id });
 
         if (user) {
-          // Update avatar only if user has no avatar or still has a Google avatar (not custom uploaded)
-          const googlePhoto = profile.photos[0]?.value;
-          if (googlePhoto && (!user.avatar || user.avatar.startsWith('https://'))) {
-            user.avatar = googlePhoto;
-            await user.save();
-          }
           return done(null, user);
         }
 
@@ -41,7 +36,7 @@ passport.use(
           googleId: profile.id,
           email: profile.emails[0].value,
           name: profile.displayName,
-          avatar: profile.photos[0]?.value,
+          avatar: generateAvatarSvg(profile.id),
         });
 
         done(null, user);
