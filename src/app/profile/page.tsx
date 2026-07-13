@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import AuthButton from "@/components/AuthButton";
@@ -10,7 +10,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
 // Helper to get full avatar URL
 const getAvatarUrl = (avatar: string) => {
   if (!avatar) return "";
-  if (avatar.startsWith("http")) return avatar;
+  if (avatar.startsWith("http") || avatar.startsWith("data:")) return avatar;
   return `${API_URL}${avatar}`;
 };
 
@@ -25,14 +25,12 @@ interface Profile {
 }
 
 export default function ProfilePage() {
-  const { user, loading: authLoading, refreshUser } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [uploadingPhoto, setUploadingPhoto] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form state
   const [name, setName] = useState("");
@@ -97,49 +95,6 @@ export default function ProfilePage() {
       setFavoriteVerse(profile.favoriteVerse);
     }
     setEditing(false);
-  };
-
-  const handlePhotoClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Image must be less than 5MB");
-      return;
-    }
-
-    setUploadingPhoto(true);
-    try {
-      const formData = new FormData();
-      formData.append("avatar", file);
-
-      const res = await fetch(`${API_URL}/api/profile/avatar`, {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        setProfile(data.profile);
-        await refreshUser(); // Update global user state
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
-      }
-    } catch (error) {
-      console.error("Error uploading photo:", error);
-    } finally {
-      setUploadingPhoto(false);
-      // Reset input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
   };
 
   if (authLoading) {
@@ -215,21 +170,8 @@ export default function ProfilePage() {
           <div className="space-y-6 opacity-0 animate-fade-in-up stagger-2">
             {/* Avatar & Name */}
             <div className="glass-card rounded-2xl p-6 text-center">
-              {/* Hidden file input */}
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handlePhotoChange}
-                accept="image/jpeg,image/png,image/gif,image/webp"
-                className="hidden"
-              />
-
-              {/* Clickable avatar */}
-              <button
-                onClick={handlePhotoClick}
-                disabled={uploadingPhoto}
-                className="relative group mx-auto mb-4 block"
-              >
+              {/* Avatar */}
+              <div className="mx-auto mb-4 w-24 h-24">
                 {profile.avatar ? (
                   <img
                     src={getAvatarUrl(profile.avatar)}
@@ -243,22 +185,7 @@ export default function ProfilePage() {
                     </span>
                   </div>
                 )}
-
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 rounded-full bg-dark-teal/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                  {uploadingPhoto ? (
-                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-                    </svg>
-                  )}
-                </div>
-              </button>
-              <p className="figtree-light text-xs text-olive/60 mb-4">
-                Tap to change photo
-              </p>
+              </div>
 
               {!editing ? (
                 <>

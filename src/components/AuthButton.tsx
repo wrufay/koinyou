@@ -7,7 +7,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
 // Helper to get full avatar URL
 const getAvatarUrl = (avatar: string) => {
   if (!avatar) return "";
-  if (avatar.startsWith("http")) return avatar;
+  if (avatar.startsWith("http") || avatar.startsWith("data:")) return avatar;
   return `${API_URL}${avatar}`;
 };
 
