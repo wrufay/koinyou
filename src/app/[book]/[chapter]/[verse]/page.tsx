@@ -1,5 +1,4 @@
 import Link from "next/link";
-import BackButton from "@/components/BackButton";
 import VerseActions from "@/components/VerseActions";
 import TranslationPicker from "@/components/TranslationPicker";
 import { fetchVerse, fetchBibles, toBookId } from "@/lib/bible";
@@ -42,7 +41,12 @@ export default async function VersePage({ params, searchParams }: PageProps) {
 
       <div className="max-w-lg w-full relative z-10">
         <div className="flex items-center gap-4 mb-8 opacity-0 animate-fade-in">
-          <BackButton />
+          <Link href="/" className="figtree-regular inline-flex items-center gap-1.5 text-xs text-olive hover:text-walnut transition-colors duration-300 link-underline">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Home
+          </Link>
           <span className="text-olive/30 text-xs">·</span>
           <Link href={`/${book}/${chapter}`} className="figtree-regular text-xs text-olive hover:text-walnut transition-colors duration-300 link-underline capitalize">
             {book} {chapter}
@@ -86,7 +90,7 @@ export default async function VersePage({ params, searchParams }: PageProps) {
 export async function generateMetadata({ params }: PageProps) {
   const { book, chapter, verse } = await params;
   return {
-    title: `${book} ${chapter}:${verse} — koinYOU`,
+    title: `${book} ${chapter}:${verse} — koinYou`,
     description: `Read ${book} ${chapter}:${verse} from the Bible`,
   };
 }

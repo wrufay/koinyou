@@ -50,13 +50,20 @@ export default function JoinPage() {
             </p>
           </div>
 
+          <Link
+            href="/"
+            className="figtree-medium px-8 py-3.5 rounded-2xl bg-pine hover:bg-dark-teal
+                       text-white text-sm shadow-lg btn-primary inline-block"
+          >
+            Let&apos;s go
+          </Link>
         </div>
       </div>
 
       {/* Footer */}
       <footer className="absolute bottom-6 z-10 opacity-0 animate-fade-in stagger-5">
         <p className="figtree-light text-xs text-olive/60">
-          koinYOU © 2026
+          koinYou © 2026
         </p>
       </footer>
     </main>

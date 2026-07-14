@@ -126,6 +126,11 @@ export async function fetchBibles(): Promise<BibleTranslation[]> {
   }
 }
 
+function cleanText(text: string): string {
+  // Strip leading "Book Chapter " prefix the API sometimes injects (e.g. "Psalm 23 The Lord...")
+  return text.replace(/^[A-Za-z\s]+\d+\s+/, "").trim();
+}
+
 function parseVerses(content: string): BibleVerse[] {
   // split with capture group gives: [preamble, verseNum, text, verseNum, text, ...]
   const parts = content.split(/\[(\d+)\]/);
@@ -181,7 +186,7 @@ export async function fetchVerse(
     });
     if (!res.ok) return null;
     const { data } = await res.json();
-    const content = data.content?.trim() || "";
+    const content = cleanText(data.content || "");
     if (isRange) {
       const verses = parseVerses(data.content || "");
       return { reference: data.reference, text: content, verses };

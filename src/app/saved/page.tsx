@@ -87,7 +87,7 @@ export default function SavedPage() {
           <div className="mb-8">
             <AuthButton />
           </div>
-          <Link href="/" className="text-olive hover:text-walnut transition-colors duration-200">
+          <Link href="/community" className="text-olive hover:text-walnut transition-colors duration-200">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -108,7 +108,7 @@ export default function SavedPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-10 opacity-0 animate-fade-in">
           <Link
-            href="/"
+            href="/community"
             className="figtree-regular inline-flex items-center gap-2 text-xs text-olive hover:text-walnut transition-colors link-underline"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,11 +141,11 @@ export default function SavedPage() {
               No saved verses yet
             </p>
             <Link
-              href="/"
+              href="/community"
               className="figtree-medium px-6 py-3 rounded-2xl bg-pine hover:bg-dark-teal
                          text-white text-sm shadow-lg btn-primary inline-block"
             >
-              Discover verses to save
+              Go to Community
             </Link>
           </div>
         ) : (

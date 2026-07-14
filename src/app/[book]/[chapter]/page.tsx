@@ -1,5 +1,4 @@
 import Link from "next/link";
-import BackButton from "@/components/BackButton";
 import VerseActions from "@/components/VerseActions";
 import TranslationPicker from "@/components/TranslationPicker";
 import { fetchChapter, fetchBibles, toBookId } from "@/lib/bible";
@@ -45,7 +44,14 @@ export default async function ChapterPage({ params, searchParams }: PageProps) {
       <div className="decorative-circle w-64 h-64 bg-olive/15 -bottom-32 -left-32 animate-pulse-soft" style={{ animationDelay: "1.5s" }} />
 
       <div className="max-w-lg mx-auto relative z-10">
-        <div className="mb-8 opacity-0 animate-fade-in"><BackButton /></div>
+        <div className="mb-8 opacity-0 animate-fade-in">
+          <Link href="/" className="figtree-regular inline-flex items-center gap-1.5 text-xs text-olive hover:text-walnut transition-colors duration-300 link-underline">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Home
+          </Link>
+        </div>
 
         <div className="glass-card rounded-3xl p-8 sm:p-10 opacity-0 animate-fade-in-up stagger-1 mb-4">
           <h1 className="nanum-pen-script-regular text-4xl sm:text-5xl text-walnut mb-2 text-center drop-shadow-sm">

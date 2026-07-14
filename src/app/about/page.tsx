@@ -48,7 +48,7 @@ export default function AboutPage() {
               </blockquote>
 
               <p>
-                We built <span className="figtree-semibold text-walnut">koinYOU</span> because we were
+                We built <span className="figtree-semibold text-walnut">koinYou</span> because we were
                 tired of social media pulling us away from what matters. Lost in the noise, it became
                 hard to see Jesus in everything — even with a community of Christians around us.
               </p>
@@ -58,7 +58,7 @@ export default function AboutPage() {
               </p>
 
               <p>
-                With koinYOU, we&apos;re bringing that ancient concept of koinonia into the digital age.
+                With koinYou, we&apos;re bringing that ancient concept of koinonia into the digital age.
                 A space to search scripture, save verses that speak to your heart, keep your friends
                 accountable, check up on each other, and share the Gospel with those around you.
               </p>
@@ -82,7 +82,7 @@ export default function AboutPage() {
       {/* Footer */}
       <footer className="absolute bottom-6 left-0 right-0 text-center z-10 opacity-0 animate-fade-in stagger-5">
         <p className="figtree-light text-xs text-olive/60">
-          koinYOU © 2026
+          koinYou © 2026
         </p>
       </footer>
     </main>

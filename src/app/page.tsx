@@ -56,12 +56,6 @@ export default function Home() {
             >
               Community
             </Link>
-            <Link
-              href="/saved"
-              className="figtree-medium text-xs text-olive hover:text-walnut transition-colors link-underline"
-            >
-              Saved
-            </Link>
           </>
         )}
         <AuthButton />
@@ -130,7 +124,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="absolute bottom-6 z-10 opacity-0 animate-fade-in stagger-5">
         <p className="figtree-light text-xs text-olive/60">
-          koinYOU © 2026
+          koinYou © 2026
         </p>
       </footer>
     </main>

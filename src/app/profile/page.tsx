@@ -321,7 +321,7 @@ export default function ProfilePage() {
       {/* Footer */}
       <footer className="absolute bottom-6 left-0 right-0 text-center z-10 opacity-0 animate-fade-in stagger-5">
         <p className="figtree-light text-xs text-olive/60">
-          koinYOU © 2026
+          koinYou © 2026
         </p>
       </footer>
     </main>
