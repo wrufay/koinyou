@@ -1,14 +1,22 @@
 import Link from "next/link";
 import VerseActions from "@/components/VerseActions";
-import { fetchVerse, toBookId } from "@/lib/bible";
+import TranslationPicker from "@/components/TranslationPicker";
+import { fetchVerse, fetchBibles, toBookId } from "@/lib/bible";
+import { DEFAULT_BIBLE_ID } from "@/lib/translations";
 
 interface PageProps {
   params: Promise<{ book: string; chapter: string; verse: string }>;
+  searchParams: Promise<{ t?: string }>;
 }
 
-export default async function VersePage({ params }: PageProps) {
+export default async function VersePage({ params, searchParams }: PageProps) {
   const { book, chapter, verse: verseNum } = await params;
-  const data = await fetchVerse(toBookId(book), chapter, verseNum);
+  const { t } = await searchParams;
+  const bibleId = t || DEFAULT_BIBLE_ID;
+  const [data, bibles] = await Promise.all([
+    fetchVerse(toBookId(book), chapter, verseNum, bibleId),
+    fetchBibles(),
+  ]);
 
   if (!data) {
     return (
@@ -73,7 +81,9 @@ export default async function VersePage({ params }: PageProps) {
           )}
 
           <div className="mt-10 pt-6 border-t border-olive/15">
-            <p className="reenie-beanie-regular text-xl text-olive text-center mb-5">New International Version</p>
+            <div className="text-center mb-5">
+              <TranslationPicker current={bibleId} bibles={bibles} />
+            </div>
             <VerseActions
               reference={data.reference}
               book={book}

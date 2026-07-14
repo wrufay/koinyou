@@ -92,14 +92,38 @@ export interface VerseData {
 
 const BASE = "https://api.scripture.api.bible/v1";
 
-function bibleId() {
-  // Once you have your api.bible key, find the NIV ID by calling:
-  // GET /v1/bibles?abbreviation=NIV with your api-key header
-  return process.env.NIV_ID || "de4e12af7f28f599-02"; // KJV fallback
+function bibleId(override?: string) {
+  return override || process.env.NIV_ID || "78a9f6124f344018-01";
 }
 
 function apiHeaders(): HeadersInit {
   return { "api-key": process.env.BIBLE_API_KEY || "" };
+}
+
+export interface BibleTranslation {
+  id: string;
+  name: string;
+  abbreviation: string;
+  language: string;
+}
+
+export async function fetchBibles(): Promise<BibleTranslation[]> {
+  try {
+    const res = await fetch(`${BASE}/bibles`, {
+      headers: apiHeaders(),
+      next: { revalidate: 86400 },
+    });
+    if (!res.ok) return [];
+    const { data } = await res.json();
+    return (data as Array<{ id: string; name: string; abbreviation: string; language: { name: string } }>).map((b) => ({
+      id: b.id,
+      name: b.name,
+      abbreviation: b.abbreviation,
+      language: b.language?.name ?? "Unknown",
+    }));
+  } catch {
+    return [];
+  }
 }
 
 function parseVerses(content: string): BibleVerse[] {
@@ -116,11 +140,12 @@ function parseVerses(content: string): BibleVerse[] {
 
 export async function fetchChapter(
   bookId: string,
-  chapter: string
+  chapter: string,
+  translationId?: string
 ): Promise<ChapterData | null> {
   try {
     const res = await fetch(
-      `${BASE}/bibles/${bibleId()}/chapters/${bookId}.${chapter}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false`,
+      `${BASE}/bibles/${bibleId(translationId)}/chapters/${bookId}.${chapter}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false`,
       { headers: apiHeaders(), next: { revalidate: 86400 } }
     );
     if (!res.ok) return null;
@@ -137,7 +162,8 @@ export async function fetchChapter(
 export async function fetchVerse(
   bookId: string,
   chapter: string,
-  verse: string
+  verse: string,
+  translationId?: string
 ): Promise<VerseData | null> {
   try {
     let url: string;
@@ -145,9 +171,9 @@ export async function fetchVerse(
     if (isRange) {
       const [start, end] = verse.split("-");
       const passageId = `${bookId}.${chapter}.${start}-${bookId}.${chapter}.${end}`;
-      url = `${BASE}/bibles/${bibleId()}/passages/${passageId}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true`;
+      url = `${BASE}/bibles/${bibleId(translationId)}/passages/${passageId}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true`;
     } else {
-      url = `${BASE}/bibles/${bibleId()}/verses/${bookId}.${chapter}.${verse}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=false`;
+      url = `${BASE}/bibles/${bibleId(translationId)}/verses/${bookId}.${chapter}.${verse}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=false`;
     }
     const res = await fetch(url, {
       headers: apiHeaders(),

@@ -1,66 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { TRANSLATIONS } from "@/lib/translations";
+import type { BibleTranslation } from "@/lib/bible";
 
 interface Props {
   current: string;
-  translationName: string;
+  bibles: BibleTranslation[];
 }
 
-export default function TranslationPicker({ current, translationName }: Props) {
+export default function TranslationPicker({ current, bibles }: Props) {
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const currentName = bibles.find((b) => b.id === current)?.name ?? "New International Version";
+
+  const filtered = useMemo(() => {
+    const q = query.toLowerCase();
+    return q
+      ? bibles.filter((b) => b.name.toLowerCase().includes(q) || b.abbreviation.toLowerCase().includes(q) || b.language.toLowerCase().includes(q))
+      : bibles;
+  }, [bibles, query]);
+
   const select = (id: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("translation", id);
+    params.set("t", id);
     router.push(`${pathname}?${params.toString()}`);
     setOpen(false);
+    setQuery("");
   };
 
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
-      {/* Clickable translation label */}
+    <div className="relative inline-block">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="reenie"
-        style={{
-          fontSize: "1.3rem",
-          color: "var(--cream-hint)",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          padding: "0.3rem 0.6rem",
-          borderRadius: "10px",
-          transition: "background 0.18s, color 0.18s",
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "0.35rem",
-        }}
-        onMouseOver={(e) => {
-          (e.currentTarget as HTMLElement).style.background = "rgba(200,90,40,0.08)";
-          (e.currentTarget as HTMLElement).style.color = "var(--rust)";
-        }}
-        onMouseOut={(e) => {
-          if (!open) {
-            (e.currentTarget as HTMLElement).style.background = "transparent";
-            (e.currentTarget as HTMLElement).style.color = "var(--cream-hint)";
-          }
-        }}
+        className="reenie-beanie-regular text-xl text-olive hover:text-pine transition-colors duration-200 inline-flex items-center gap-1"
       >
-        {translationName}
+        {currentName}
         <svg
-          style={{
-            width: "0.75rem",
-            height: "0.75rem",
-            transition: "transform 0.2s",
-            transform: open ? "rotate(180deg)" : "rotate(0deg)",
-            opacity: 0.5,
-          }}
+          className="w-3 h-3 opacity-50 transition-transform duration-200"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -69,85 +51,42 @@ export default function TranslationPicker({ current, translationName }: Props) {
         </svg>
       </button>
 
-      {/* Dropdown */}
       {open && (
         <>
-          {/* Backdrop */}
-          <div
-            style={{ position: "fixed", inset: 0, zIndex: 40 }}
-            onClick={() => setOpen(false)}
-          />
-
-          {/* Panel — opens upward */}
-          <div
-            className="g-card"
-            style={{
-              position: "absolute",
-              bottom: "calc(100% + 10px)",
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 50,
-              minWidth: "220px",
-              padding: "0.5rem",
-              overflowY: "auto",
-              maxHeight: "340px",
-            }}
-          >
-            <p
-              className="g-label-cream"
-              style={{ padding: "0.4rem 0.85rem 0.5rem", marginBottom: 0 }}
-            >
-              Translation
-            </p>
-
-            {TRANSLATIONS.map((t) => {
-              const active = t.id === current;
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => select(t.id)}
-                  className="nunito"
-                  style={{
-                    width: "100%",
-                    textAlign: "left",
-                    padding: "0.62rem 0.85rem",
-                    borderRadius: "12px",
-                    border: "none",
-                    background: active ? "rgba(200,90,40,0.1)" : "transparent",
-                    color: active ? "var(--rust)" : "var(--cream-mid)",
-                    fontWeight: active ? 800 : 600,
-                    fontSize: "0.85rem",
-                    cursor: "pointer",
-                    transition: "background 0.15s",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: "1rem",
-                  }}
-                  onMouseOver={(e) => {
-                    if (!active) (e.currentTarget as HTMLElement).style.background = "rgba(42,28,12,0.05)";
-                  }}
-                  onMouseOut={(e) => {
-                    if (!active) (e.currentTarget as HTMLElement).style.background = "transparent";
-                  }}
-                >
-                  <span>{t.name}</span>
-                  <span
-                    style={{
-                      fontSize: "0.62rem",
-                      fontWeight: 700,
-                      color: active ? "var(--rust)" : "var(--cream-hint)",
-                      background: active ? "rgba(200,90,40,0.12)" : "rgba(42,28,12,0.06)",
-                      padding: "0.12rem 0.5rem",
-                      borderRadius: "999px",
-                      flexShrink: 0,
-                    }}
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 bg-[#e8ede8] rounded-2xl p-2 w-64 shadow-lg border border-olive/20">
+            <div className="px-2 pb-2 pt-1">
+              <input
+                autoFocus
+                type="text"
+                placeholder="Search translations..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full figtree-regular text-sm text-dark-teal bg-white rounded-xl px-3 py-2
+                           border border-olive/20 focus:outline-none focus:border-pine/40 placeholder:text-olive/40"
+              />
+            </div>
+            <div className="overflow-y-auto max-h-56">
+              {filtered.length === 0 && (
+                <p className="figtree-light text-xs text-olive/50 text-center py-4">No results</p>
+              )}
+              {filtered.map((b) => {
+                const active = b.id === current;
+                return (
+                  <button
+                    key={b.id}
+                    onClick={() => select(b.id)}
+                    className={`w-full text-left px-3 py-2 rounded-xl flex items-center justify-between gap-3 transition-colors duration-150
+                      ${active ? "bg-pine/10 text-pine" : "text-dark-teal/70 hover:bg-olive/10"}`}
                   >
-                    {t.short}
-                  </span>
-                </button>
-              );
-            })}
+                    <span className="figtree-regular text-sm truncate">{b.name}</span>
+                    <span className={`figtree-semibold text-xs px-2 py-0.5 rounded-full shrink-0 ${active ? "bg-pine/15 text-pine" : "bg-olive/10 text-olive"}`}>
+                      {b.abbreviation}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </>
       )}

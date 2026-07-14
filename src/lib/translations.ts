@@ -1,10 +1,12 @@
 export const TRANSLATIONS = [
-  { id: "web",     name: "World English Bible", short: "WEB"   },
-  { id: "kjv",     name: "King James Version",  short: "KJV"   },
-  { id: "asv",     name: "American Standard",   short: "ASV"   },
-  { id: "bbe",     name: "Basic English Bible",  short: "BBE"   },
-  { id: "darby",   name: "Darby Bible",         short: "Darby" },
-  { id: "ylt",     name: "Young's Literal",     short: "YLT"   },
-  { id: "dra",     name: "Douay-Rheims",        short: "DRA"   },
-  { id: "webster", name: "Webster Bible",       short: "Web."  },
+  { id: "78a9f6124f344018-01", name: "New International Version", short: "NIV" },
+  { id: "de4e12af7f28f599-02", name: "King James Version",        short: "KJV" },
+  { id: "06125adad2d5898a-01", name: "American Standard Version",  short: "ASV" },
+  { id: "9879dbb7cfe39e4d-04", name: "World English Bible",        short: "WEB" },
 ] as const;
+
+export const DEFAULT_BIBLE_ID = "78a9f6124f344018-01";
+
+export function getTranslationName(bibleId: string): string {
+  return TRANSLATIONS.find((t) => t.id === bibleId)?.name ?? "New International Version";
+}
