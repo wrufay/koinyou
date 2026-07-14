@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import AuthButton from "@/components/AuthButton";
+import BackButton from "@/components/BackButton";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
 
 // Helper to get full avatar URL
 const getAvatarUrl = (avatar: string) => {
   if (!avatar) return "";
-  if (avatar.startsWith("http")) return avatar;
+  if (avatar.startsWith("http") || avatar.startsWith("data:")) return avatar;
   return `${API_URL}${avatar}`;
 };
 
@@ -91,11 +92,10 @@ export default function CommunityPage() {
           <div className="mb-8">
             <AuthButton />
           </div>
-          <Link
-            href="/"
-            className="figtree-regular text-xs text-olive hover:text-walnut transition-colors link-underline"
-          >
-            Back to search
+          <Link href="/" className="figtree-regular text-olive hover:text-walnut transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
           </Link>
         </div>
       </main>
@@ -110,28 +110,17 @@ export default function CommunityPage() {
       <div className="max-w-lg mx-auto relative z-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-8 opacity-0 animate-fade-in">
-          <Link
-            href="/"
-            className="figtree-regular inline-flex items-center gap-2 text-xs text-olive hover:text-walnut transition-colors link-underline"
-          >
+          <Link href="/" className="text-olive hover:text-walnut transition-colors duration-200">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span>Home</span>
           </Link>
           <div className="flex items-center gap-4">
             <Link
               href="/profile"
-              className="figtree-regular inline-flex items-center gap-1.5 text-xs text-olive hover:text-walnut transition-colors"
+              className="figtree-regular text-xs text-olive hover:text-walnut transition-colors"
             >
-              {user?.avatar ? (
-                <img src={getAvatarUrl(user.avatar)} alt={user.name} className="w-6 h-6 rounded-full border border-white/50 object-cover" />
-              ) : (
-                <div className="w-6 h-6 rounded-full bg-pine/20 flex items-center justify-center">
-                  <span className="figtree-medium text-pine text-xs">{user?.name?.charAt(0)}</span>
-                </div>
-              )}
-              <span className="hidden sm:inline">Profile</span>
+              Profile
             </Link>
             <AuthButton />
           </div>
@@ -149,11 +138,7 @@ export default function CommunityPage() {
 
         {/* Streak Card */}
         <div className="glass-card rounded-2xl p-6 mb-6 text-center opacity-0 animate-fade-in-up stagger-2">
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <svg className="w-8 h-8 text-walnut" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12.75 2.25c0 4.5-3 6.75-3 10.5a3 3 0 106 0c0-1.5-.75-3-1.5-4.5.75 3 .75 6 0 7.5a4.5 4.5 0 01-3 1.5 4.5 4.5 0 01-4.5-4.5c0-3 1.5-6 4.5-9a13.5 13.5 0 011.5-1.5z"/>
-              <path d="M15.75 12.75c0 2.25-1.5 4.5-3.75 4.5s-3.75-2.25-3.75-4.5c0-2.25 1.5-5.25 3.75-7.5 2.25 2.25 3.75 5.25 3.75 7.5z" fillOpacity="0.3"/>
-            </svg>
+          <div className="flex items-center justify-center mb-2">
             <span className="nanum-pen-script-regular text-4xl text-walnut">
               {streakData?.streak || 0}
             </span>

@@ -20,7 +20,7 @@ export default function Home() {
     if (verseMatch) {
       const [, book, chapter, verse] = verseMatch;
       const cleanBook = book.replace(/\s+/g, "").toLowerCase();
-      router.push(`/verse/${cleanBook}/${chapter}/${verse.trim()}`);
+      router.push(`/${cleanBook}/${chapter}/${verse.trim()}`);
       return;
     }
 
@@ -28,7 +28,7 @@ export default function Home() {
     if (chapterMatch) {
       const [, book, chapter] = chapterMatch;
       const cleanBook = book.replace(/\s+/g, "").toLowerCase();
-      router.push(`/verse/${cleanBook}/${chapter}`);
+      router.push(`/${cleanBook}/${chapter}`);
     }
   };
 
@@ -112,7 +112,7 @@ export default function Home() {
             {exampleVerses.map((verse, index) => (
               <Link
                 key={verse.path}
-                href={`/verse/${verse.path}`}
+                href={`/${verse.path}`}
                 className="figtree-medium px-4 py-2 rounded-full
                            bg-white/50 hover:bg-white/80 backdrop-blur-sm
                            border border-pine/20 hover:border-pine/40

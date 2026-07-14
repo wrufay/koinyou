@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import BackButton from "@/components/BackButton";
 
 export default function AboutPage() {
   return (
@@ -12,15 +13,10 @@ export default function AboutPage() {
 
       <div className="max-w-xl mx-auto relative z-10">
         {/* Back link */}
-        <Link
-          href="/"
-          className="figtree-regular inline-flex items-center gap-2 text-xs text-olive hover:text-walnut
-                     mb-10 transition-colors duration-300 link-underline opacity-0 animate-fade-in"
-        >
+        <Link href="/" className="text-olive hover:text-walnut transition-colors duration-200 mb-10 opacity-0 animate-fade-in inline-block">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          <span>Back to home</span>
         </Link>
 
         {/* Main content */}
