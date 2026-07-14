@@ -87,6 +87,7 @@ export interface ChapterData {
 export interface VerseData {
   reference: string;
   text: string;
+  verses?: BibleVerse[];
 }
 
 const BASE = "https://api.scripture.api.bible/v1";
@@ -140,10 +141,11 @@ export async function fetchVerse(
 ): Promise<VerseData | null> {
   try {
     let url: string;
-    if (verse.includes("-")) {
+    const isRange = verse.includes("-");
+    if (isRange) {
       const [start, end] = verse.split("-");
       const passageId = `${bookId}.${chapter}.${start}-${bookId}.${chapter}.${end}`;
-      url = `${BASE}/bibles/${bibleId()}/passages/${passageId}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=false`;
+      url = `${BASE}/bibles/${bibleId()}/passages/${passageId}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true`;
     } else {
       url = `${BASE}/bibles/${bibleId()}/verses/${bookId}.${chapter}.${verse}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=false`;
     }
@@ -153,7 +155,12 @@ export async function fetchVerse(
     });
     if (!res.ok) return null;
     const { data } = await res.json();
-    return { reference: data.reference, text: data.content?.trim() || "" };
+    const content = data.content?.trim() || "";
+    if (isRange) {
+      const verses = parseVerses(data.content || "");
+      return { reference: data.reference, text: content, verses };
+    }
+    return { reference: data.reference, text: content };
   } catch {
     return null;
   }

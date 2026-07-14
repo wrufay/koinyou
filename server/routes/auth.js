@@ -1,54 +1,38 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
+const { signToken, cookieOptions } = require("../config/jwt");
 
-// @route   GET /auth/google
-// @desc    Auth with Google
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+const isProduction = process.env.NODE_ENV === "production";
 
-// @route   GET /auth/google/callback
-// @desc    Google auth callback
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
+  passport.authenticate("google", { failureRedirect: "/", session: false }),
   (req, res) => {
+    const token = signToken(req.user._id);
+    res.cookie("token", token, cookieOptions(isProduction));
     res.redirect(process.env.CLIENT_URL || "http://localhost:3000");
   }
 );
 
-// @route   GET /auth/user
-// @desc    Get current user
-router.get("/user", async (req, res) => {
-  if (req.user) {
-    // Fetch fresh user data from database to ensure avatar is up-to-date
-    const User = require("../models/User");
-    const freshUser = await User.findById(req.user._id);
-    res.json({
-      success: true,
-      user: {
-        id: freshUser._id,
-        name: freshUser.name,
-        email: freshUser.email,
-        avatar: freshUser.avatar,
-      },
-    });
-  } else {
-    res.json({ success: false, user: null });
-  }
+router.get("/user", (req, res) => {
+  if (!req.user) return res.json({ success: false, user: null });
+  res.json({
+    success: true,
+    user: {
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      avatar: req.user.avatar,
+    },
+  });
 });
 
-// @route   GET /auth/logout
-// @desc    Logout user
 router.get("/logout", (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return res.status(500).json({ success: false, message: "Logout failed" });
-    }
-    res.redirect(process.env.CLIENT_URL || "http://localhost:3000");
-  });
+  res.clearCookie("token", cookieOptions(isProduction));
+  res.redirect(process.env.CLIENT_URL || "http://localhost:3000");
 });
 
 module.exports = router;

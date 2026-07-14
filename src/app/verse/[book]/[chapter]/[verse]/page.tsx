@@ -57,11 +57,23 @@ export default async function VersePage({ params }: PageProps) {
             {data.reference}
           </h1>
 
-          <p className="figtree-regular text-base leading-relaxed text-dark-teal/90 text-center opacity-0 animate-fade-in stagger-2">
-            {data.text}
-          </p>
+          {data.verses ? (
+            <div className="space-y-4 opacity-0 animate-fade-in stagger-2">
+              {data.verses.map((v) => (
+                <p key={v.verse} className="figtree-regular text-base leading-relaxed text-dark-teal/90">
+                  <span className="figtree-semibold text-pine text-xs align-super mr-1.5">{v.verse}</span>
+                  {v.text}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <p className="figtree-regular text-base leading-relaxed text-dark-teal/90 text-center opacity-0 animate-fade-in stagger-2">
+              {data.text}
+            </p>
+          )}
 
           <div className="mt-10 pt-6 border-t border-olive/15">
+            <p className="reenie-beanie-regular text-xl text-olive text-center mb-5">New International Version</p>
             <VerseActions
               reference={data.reference}
               book={book}

@@ -80,15 +80,6 @@ export default function AboutPage() {
           </div>
 
           {/* CTA */}
-          <div className="mt-10 text-center opacity-0 animate-fade-in stagger-4">
-            <Link
-              href="/"
-              className="figtree-medium px-8 py-4 rounded-2xl bg-pine hover:bg-dark-teal
-                         text-white text-sm shadow-lg btn-primary inline-block"
-            >
-              Start exploring scripture
-            </Link>
-          </div>
         </article>
       </div>
 

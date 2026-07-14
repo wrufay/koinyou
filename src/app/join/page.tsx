@@ -54,16 +54,6 @@ export default function JoinPage() {
             </p>
           </div>
 
-          {/* CTA */}
-          <div className="opacity-0 animate-fade-in stagger-3">
-            <Link
-              href="/"
-              className="figtree-medium px-8 py-4 rounded-2xl bg-pine hover:bg-dark-teal
-                         text-white text-sm shadow-lg btn-primary inline-block"
-            >
-              Start exploring
-            </Link>
-          </div>
         </div>
       </div>
 

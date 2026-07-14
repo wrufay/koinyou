@@ -65,6 +65,7 @@ export default async function ChapterPage({ params }: PageProps) {
           </div>
 
           <div className="mt-10 pt-6 border-t border-olive/15">
+            <p className="reenie-beanie-regular text-xl text-olive text-center mb-5">New International Version</p>
             <VerseActions reference={data.reference} book={book} chapter={chapter} verse="1" text={fullText} />
           </div>
         </div>
