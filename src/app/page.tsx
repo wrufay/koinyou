@@ -13,17 +13,22 @@ export default function Home() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      const input = query.trim().toLowerCase();
-      // Match patterns like "John 3:16", "1 Corinthians 13:4", "1cor 13:4-7"
-      const match = input.match(/^(\d?\s*[a-z]+(?:\s+[a-z]+)?)\s+(\d+):(.+)$/i);
-      if (match) {
-        const [, book, chapter, verse] = match;
-        // Remove spaces for books like "1 corinthians" -> "1corinthians" (what bible-api expects)
-        const cleanBook = book.replace(/\s+/g, "").trim();
-        const cleanVerse = verse.trim();
-        router.push(`/verse/${cleanBook}/${chapter}/${cleanVerse}`);
-      }
+    const input = query.trim();
+    if (!input) return;
+
+    const verseMatch = input.match(/^(\d?\s*[a-z]+(?:\s+[a-z]+)?)\s+(\d+):(.+)$/i);
+    if (verseMatch) {
+      const [, book, chapter, verse] = verseMatch;
+      const cleanBook = book.replace(/\s+/g, "").toLowerCase();
+      router.push(`/verse/${cleanBook}/${chapter}/${verse.trim()}`);
+      return;
+    }
+
+    const chapterMatch = input.match(/^(\d?\s*[a-z]+(?:\s+[a-z]+)?)\s+(\d+)$/i);
+    if (chapterMatch) {
+      const [, book, chapter] = chapterMatch;
+      const cleanBook = book.replace(/\s+/g, "").toLowerCase();
+      router.push(`/verse/${cleanBook}/${chapter}`);
     }
   };
 
@@ -82,7 +87,7 @@ export default function Home() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Enter a verse (e.g., John 3:16)"
+              placeholder="e.g. John 3:16 or John 3"
               className="figtree-regular flex-1 px-5 py-3.5 rounded-2xl border-2 border-olive/20
                          bg-white/70 backdrop-blur-sm
                          focus:outline-none focus:border-pine focus:bg-white/90

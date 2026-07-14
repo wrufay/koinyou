@@ -1,48 +1,14 @@
 import Link from "next/link";
 import VerseActions from "@/components/VerseActions";
-
-interface BibleVerse {
-  book_id: string;
-  book_name: string;
-  chapter: number;
-  verse: number;
-  text: string;
-}
-
-interface BibleResponse {
-  reference: string;
-  verses: BibleVerse[];
-  text: string;
-  translation_id: string;
-  translation_name: string;
-  translation_note: string;
-}
+import { fetchVerse, toBookId } from "@/lib/bible";
 
 interface PageProps {
   params: Promise<{ book: string; chapter: string; verse: string }>;
 }
 
-async function getVerse(
-  book: string,
-  chapter: string,
-  verse: string
-): Promise<BibleResponse | null> {
-  try {
-    const reference = `${book}+${chapter}:${verse}`;
-    const res = await fetch(`https://bible-api.com/${reference}`, {
-      next: { revalidate: 3600 },
-    });
-
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
-}
-
 export default async function VersePage({ params }: PageProps) {
   const { book, chapter, verse: verseNum } = await params;
-  const data = await getVerse(book, chapter, verseNum);
+  const data = await fetchVerse(toBookId(book), chapter, verseNum);
 
   if (!data) {
     return (
@@ -69,17 +35,12 @@ export default async function VersePage({ params }: PageProps) {
     );
   }
 
-  const verseText = data.verses?.map((v) => v.text).join(" ") || data.text;
-
   return (
     <main className="figtree min-h-screen flex flex-col items-center justify-center px-5 py-12 bg-gradient-main texture-overlay relative overflow-hidden">
-      {/* Decorative elements */}
       <div className="decorative-circle w-80 h-80 bg-pine/25 -top-40 -right-40 animate-pulse-soft" />
       <div className="decorative-circle w-64 h-64 bg-olive/15 -bottom-32 -left-32 animate-pulse-soft" style={{ animationDelay: "1.5s" }} />
-      <div className="decorative-circle w-40 h-40 bg-walnut/10 top-1/4 -right-20 animate-float" />
 
       <div className="max-w-lg w-full relative z-10">
-        {/* Back link */}
         <Link
           href="/"
           className="figtree-regular inline-flex items-center gap-2 text-xs text-olive hover:text-walnut
@@ -91,51 +52,26 @@ export default async function VersePage({ params }: PageProps) {
           <span>Back to search</span>
         </Link>
 
-        {/* Main card */}
-        <div className="glass-card rounded-3xl p-8 sm:p-10 transition-all duration-500 opacity-0 animate-fade-in-up stagger-1">
-          {/* Reference title */}
+        <div className="glass-card rounded-3xl p-8 sm:p-10 opacity-0 animate-fade-in-up stagger-1">
           <h1 className="nanum-pen-script-regular text-4xl sm:text-5xl text-walnut mb-8 text-center drop-shadow-sm">
             {data.reference}
           </h1>
 
-          {/* Verse content */}
-          <div className="space-y-4">
-            {data.verses && data.verses.length > 0 ? (
-              data.verses.map((v, index) => (
-                <p
-                  key={index}
-                  className="figtree-regular text-base leading-relaxed text-dark-teal/90 opacity-0 animate-fade-in"
-                  style={{ animationDelay: `${0.3 + index * 0.1}s` }}
-                >
-                  <span className="figtree-semibold text-pine text-xs align-super mr-1.5">
-                    {v.verse}
-                  </span>
-                  {v.text}
-                </p>
-              ))
-            ) : (
-              <p className="figtree-regular text-base leading-relaxed text-dark-teal/90 text-center">
-                {data.text}
-              </p>
-            )}
-          </div>
+          <p className="figtree-regular text-base leading-relaxed text-dark-teal/90 text-center opacity-0 animate-fade-in stagger-2">
+            {data.text}
+          </p>
 
-          {/* Divider and translation */}
           <div className="mt-10 pt-6 border-t border-olive/15">
-            <p className="reenie-beanie-regular text-xl text-olive text-center mb-5">
-              {data.translation_name || "World English Bible"}
-            </p>
             <VerseActions
               reference={data.reference}
               book={book}
               chapter={chapter}
               verse={verseNum}
-              text={verseText}
+              text={data.text}
             />
           </div>
         </div>
 
-        {/* Bottom action */}
         <div className="mt-8 text-center opacity-0 animate-fade-in stagger-3">
           <Link
             href="/"
