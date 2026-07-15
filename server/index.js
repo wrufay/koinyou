@@ -18,7 +18,18 @@ const app = express();
 connectDB();
 
 app.set("trust proxy", 1);
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:3000", credentials: true }));
+const allowedOrigins = [
+  process.env.CLIENT_URL || "http://localhost:3000",
+  "https://koinyou.com",
+  "https://www.koinyou.com",
+];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) callback(null, true);
+    else callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
