@@ -1,3 +1,7 @@
+import { connectDB } from "./db";
+import BibleCache from "./models/BibleCache";
+import CacheMetric from "./models/CacheMetric";
+
 const BOOK_MAP: Record<string, string> = {
   // Old Testament
   genesis: "GEN", gen: "GEN",
@@ -100,6 +104,36 @@ function apiHeaders(): HeadersInit {
   return { "api-key": process.env.BIBLE_API_KEY || "" };
 }
 
+type CacheKind = "chapter" | "verse" | "bibles";
+
+async function getCached<T>(key: string): Promise<T | null> {
+  try {
+    await connectDB();
+    const doc = await BibleCache.findOne({ key }).lean<{ data: T }>();
+    return doc ? doc.data : null;
+  } catch {
+    return null;
+  }
+}
+
+async function setCached(key: string, kind: CacheKind, data: unknown): Promise<void> {
+  try {
+    await connectDB();
+    await BibleCache.updateOne({ key }, { key, kind, data }, { upsert: true });
+  } catch {
+    // Cache write failure shouldn't break the response — we just refetch next time.
+  }
+}
+
+async function logMetric(outcome: "hit" | "miss", kind: CacheKind): Promise<void> {
+  try {
+    await connectDB();
+    await CacheMetric.create({ outcome, kind });
+  } catch {
+    // Metrics are best-effort — never block the page on this.
+  }
+}
+
 export interface BibleTranslation {
   id: string;
   name: string;
@@ -108,19 +142,28 @@ export interface BibleTranslation {
 }
 
 export async function fetchBibles(): Promise<BibleTranslation[]> {
+  const cacheKey = "bibles:list";
+  const cached = await getCached<BibleTranslation[]>(cacheKey);
+  if (cached) {
+    await logMetric("hit", "bibles");
+    return cached;
+  }
+
   try {
     const res = await fetch(`${BASE}/bibles`, {
       headers: apiHeaders(),
-      next: { revalidate: 86400 },
+      next: { revalidate: 31536000 },
     });
     if (!res.ok) return [];
     const { data } = await res.json();
-    return (data as Array<{ id: string; name: string; abbreviation: string; language: { name: string } }>).map((b) => ({
+    const bibles = (data as Array<{ id: string; name: string; abbreviation: string; language: { name: string } }>).map((b) => ({
       id: b.id,
       name: b.name,
       abbreviation: b.abbreviation,
       language: b.language?.name ?? "Unknown",
     }));
+    await Promise.all([logMetric("miss", "bibles"), setCached(cacheKey, "bibles", bibles)]);
+    return bibles;
   } catch {
     return [];
   }
@@ -148,17 +191,29 @@ export async function fetchChapter(
   chapter: string,
   translationId?: string
 ): Promise<ChapterData | null> {
+  const resolvedBibleId = bibleId(translationId);
+  const cacheKey = `chapter:${resolvedBibleId}:${bookId}.${chapter}`;
+  const cached = await getCached<ChapterData>(cacheKey);
+  if (cached) {
+    await logMetric("hit", "chapter");
+    return cached;
+  }
+
   try {
     const res = await fetch(
-      `${BASE}/bibles/${bibleId(translationId)}/chapters/${bookId}.${chapter}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false`,
-      { headers: apiHeaders(), next: { revalidate: 86400 } }
+      `${BASE}/bibles/${resolvedBibleId}/chapters/${bookId}.${chapter}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false`,
+      { headers: apiHeaders(), next: { revalidate: 31536000 } }
     );
     if (!res.ok) return null;
     const { data } = await res.json();
-    return {
+    const chapterData: ChapterData = {
       reference: data.reference,
       verses: parseVerses(data.content || ""),
     };
+    if (chapterData.verses.length) {
+      await Promise.all([logMetric("miss", "chapter"), setCached(cacheKey, "chapter", chapterData)]);
+    }
+    return chapterData;
   } catch {
     return null;
   }
@@ -170,28 +225,38 @@ export async function fetchVerse(
   verse: string,
   translationId?: string
 ): Promise<VerseData | null> {
+  const resolvedBibleId = bibleId(translationId);
+  const cacheKey = `verse:${resolvedBibleId}:${bookId}.${chapter}.${verse}`;
+  const cached = await getCached<VerseData>(cacheKey);
+  if (cached) {
+    await logMetric("hit", "verse");
+    return cached;
+  }
+
   try {
     let url: string;
     const isRange = verse.includes("-");
     if (isRange) {
       const [start, end] = verse.split("-");
       const passageId = `${bookId}.${chapter}.${start}-${bookId}.${chapter}.${end}`;
-      url = `${BASE}/bibles/${bibleId(translationId)}/passages/${passageId}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true`;
+      url = `${BASE}/bibles/${resolvedBibleId}/passages/${passageId}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=true`;
     } else {
-      url = `${BASE}/bibles/${bibleId(translationId)}/verses/${bookId}.${chapter}.${verse}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=false`;
+      url = `${BASE}/bibles/${resolvedBibleId}/verses/${bookId}.${chapter}.${verse}?content-type=text&include-notes=false&include-titles=false&include-chapter-numbers=false&include-verse-numbers=false`;
     }
     const res = await fetch(url, {
       headers: apiHeaders(),
-      next: { revalidate: 86400 },
+      next: { revalidate: 31536000 },
     });
     if (!res.ok) return null;
     const { data } = await res.json();
     const content = cleanText(data.content || "");
-    if (isRange) {
-      const verses = parseVerses(data.content || "");
-      return { reference: data.reference, text: content, verses };
+    const verseData: VerseData = isRange
+      ? { reference: data.reference, text: content, verses: parseVerses(data.content || "") }
+      : { reference: data.reference, text: content };
+    if (verseData.text) {
+      await Promise.all([logMetric("miss", "verse"), setCached(cacheKey, "verse", verseData)]);
     }
-    return { reference: data.reference, text: content };
+    return verseData;
   } catch {
     return null;
   }
