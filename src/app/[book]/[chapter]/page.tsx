@@ -1,7 +1,7 @@
 import Link from "next/link";
 import VerseActions from "@/components/VerseActions";
 import TranslationPicker from "@/components/TranslationPicker";
-import { fetchChapter, fetchBibles, toBookId } from "@/lib/bible";
+import { fetchChapter, fetchBibles, toBookId, getChapterCount } from "@/lib/bible";
 import { DEFAULT_BIBLE_ID } from "@/lib/translations";
 
 interface PageProps {
@@ -37,6 +37,7 @@ export default async function ChapterPage({ params, searchParams }: PageProps) {
 
   const fullText = data.verses.map((v) => v.text).join(" ");
   const chapterNum = parseInt(chapter);
+  const totalChapters = getChapterCount(bookId);
 
   return (
     <main className="figtree min-h-screen px-5 py-12 bg-gradient-main texture-overlay relative overflow-hidden">
@@ -102,9 +103,11 @@ export default async function ChapterPage({ params, searchParams }: PageProps) {
                 Ch. {chapterNum - 1}
               </Link>
             )}
-            <Link href={`/${book}/${chapterNum + 1}`} className="figtree-medium px-4 py-2 rounded-xl bg-white/50 hover:bg-white/80 border border-pine/20 hover:border-pine/40 text-dark-teal text-xs tag-hover">
-              Ch. {chapterNum + 1}
-            </Link>
+            {(totalChapters === null || chapterNum < totalChapters) && (
+              <Link href={`/${book}/${chapterNum + 1}`} className="figtree-medium px-4 py-2 rounded-xl bg-white/50 hover:bg-white/80 border border-pine/20 hover:border-pine/40 text-dark-teal text-xs tag-hover">
+                Ch. {chapterNum + 1}
+              </Link>
+            )}
           </div>
         </div>
 

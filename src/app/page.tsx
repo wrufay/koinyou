@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AuthButton from "@/components/AuthButton";
@@ -10,6 +10,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const router = useRouter();
   const { user } = useAuth();
+  const [isPending, startTransition] = useTransition();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +21,9 @@ export default function Home() {
     if (verseMatch) {
       const [, book, chapter, verse] = verseMatch;
       const cleanBook = book.replace(/\s+/g, "").toLowerCase();
-      router.push(`/${cleanBook}/${chapter}/${verse.trim()}`);
+      startTransition(() => {
+        router.push(`/${cleanBook}/${chapter}/${verse.trim()}`);
+      });
       return;
     }
 
@@ -28,7 +31,9 @@ export default function Home() {
     if (chapterMatch) {
       const [, book, chapter] = chapterMatch;
       const cleanBook = book.replace(/\s+/g, "").toLowerCase();
-      router.push(`/${cleanBook}/${chapter}`);
+      startTransition(() => {
+        router.push(`/${cleanBook}/${chapter}`);
+      });
     }
   };
 
@@ -90,10 +95,16 @@ export default function Home() {
             />
             <button
               type="submit"
+              disabled={isPending}
               className="figtree-medium px-7 py-3.5 rounded-2xl bg-pine hover:bg-dark-teal
-                         text-white text-sm shadow-lg btn-primary"
+                         text-white text-sm shadow-lg btn-primary
+                         disabled:opacity-50 disabled:cursor-not-allowed
+                         flex items-center justify-center gap-2"
             >
-              Search
+              {isPending && (
+                <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+              )}
+              {isPending ? "Searching..." : "Search"}
             </button>
           </div>
         </form>
